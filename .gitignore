@@ -1,0 +1,8 @@
+x64/
+.vs/
+packages/
+
+*.user
+*.aps
+*.rc
+resource.h
