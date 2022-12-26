@@ -1,10 +1,13 @@
 #include "Game.h"
 
-
 #include <time.h>
 
 #include <cstdlib>
 #include <iostream>
+
+#include "Acre.h"
+#include "People.h"
+#include "Wheat.h"
 Game::Game() {
   round = 0;
   want_to_exit = 0;

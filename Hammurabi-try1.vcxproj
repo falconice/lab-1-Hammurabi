@@ -127,10 +127,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Acre.cpp" />
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="People.cpp" />
+    <ClCompile Include="Wheat.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Acre.h" />
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="People.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="Wheat.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Hammurabi-try1.rc" />
