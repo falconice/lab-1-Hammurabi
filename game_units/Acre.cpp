@@ -4,9 +4,16 @@
 
 #include <iostream>
 
-Acre::Acre() {
+Acre::Acre()
+    : acre_quantity_(0),
+      acre_price_(0),
+      buy_acres_(0),
+      sell_acres_(0),
+      plant_acres_(0){};
+
+void Acre::AcreStart(int start) {
   // default
-  acre_quantity_ = 1000;
+  this->acre_quantity_ = start;
 }
 
 float Acre::GetAcreQuantity() {
@@ -16,7 +23,12 @@ float Acre::GetAcreQuantity() {
 void Acre::GenerateAcrePrice() {
   srand(time(0));
   // random price from 17 to 26
-  acre_price_ = (rand() % 26) + 17;
+  acre_price_ = 17 + (rand() % 9);
+}
+
+float Acre::GetAcrePrice() {
+  GenerateAcrePrice();
+  return this->acre_price_;
 }
 
 void Acre::ArcesWantToBuy(float buy) {

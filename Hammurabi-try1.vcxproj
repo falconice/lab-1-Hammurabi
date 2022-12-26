@@ -127,18 +127,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Acre.cpp" />
-    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="game_units\Acre.cpp" />
+    <ClCompile Include="game_units\Game.cpp" />
+    <ClCompile Include="game_units\People.cpp" />
+    <ClCompile Include="game_units\Wheat.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="People.cpp" />
-    <ClCompile Include="Wheat.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Acre.h" />
-    <ClInclude Include="Game.h" />
-    <ClInclude Include="People.h" />
+    <ClInclude Include="game_units\Acre.h" />
+    <ClInclude Include="game_units\Game.h" />
+    <ClInclude Include="game_units\People.h" />
+    <ClInclude Include="game_units\Wheat.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="Wheat.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Hammurabi-try1.rc" />

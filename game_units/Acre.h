@@ -2,8 +2,10 @@
 class Acre {
  public:
   Acre();
+  void AcreStart(int start);
   float GetAcreQuantity();
   void GenerateAcrePrice();
+  float GetAcrePrice();
   void ArcesWantToBuy(float buy);
   void ArcesWantToSell(float sell);
   void ArcesWantToPlant(float plant);

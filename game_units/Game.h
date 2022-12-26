@@ -1,3 +1,6 @@
+#include "Acre.h"
+#include "People.h"
+#include "Wheat.h"
 #pragma once
 class Game {
  public:
@@ -32,6 +35,7 @@ class Game {
  private:
   int round;
   int want_to_exit;
-
-
+  Acre acre;
+  People people;
+  Wheat wheat;
 };

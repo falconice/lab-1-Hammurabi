@@ -2,11 +2,17 @@
 class Wheat {
  public:
   Wheat();
-  float GetWheatPerAcre();
-  float GetDestroyedWheat();
+  void WheatStart(int start);
+  void GenerateWheatPerAcre();
+  int GetWheatPerAcre();
+
+  void GenerateDestroyedWheat(int population);
+  float GetDestroyedWheat(int population);
+  float GetWheatQuantity();
+  void WheatToFeed(float feedWheat);
 
  private:
-  float wheat_per_acre_;
+  int wheat_per_acre_;
   float all_wheat_;  // ??
   float destroyed_wheat_;
   float food_wheat_;  // from user

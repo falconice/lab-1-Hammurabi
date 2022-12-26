@@ -2,10 +2,15 @@
 class People {
  public:
   People();
+  void PeopleStart(int start);
 
   int GetPopulation();
+  int GetStarvation(float wheat_quantity);
+  int GetNewcommers(int wheat_per_acre, float wheat);
+  bool WasPlague();
+
   void CalculateStarvation(float wheat);
-  int GenerateNewcommers(int per_acre, float wheat);
+  void GenerateNewcommers(int wheat_per_acre, float wheat);
   void GeneratePlague();
 
  private:
