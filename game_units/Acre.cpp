@@ -23,32 +23,18 @@ float Acre::GetAcreQuantity() {
 }
 
 float Acre::GetAcrePrice() {
-  // GenerateAcrePrice();
   return this->acre_price_;
 }
 
 void Acre::ArcesWantToBuy(float buy) {
   buy_acres_ = buy;
- // acre_quantity_ = +buy_acres_;
 }
 
 void Acre::ArcesWantToSell(float sell) {
   sell_acres_ = sell;
- // acre_quantity_ = sell_acres_;
 }
 
 void Acre::UpdateAcreQuantity() {
   this->acre_quantity_ = acre_quantity_ + buy_acres_;
   this->acre_quantity_ = acre_quantity_ - sell_acres_;
 }
-
-// int Acre::CheckAcreBuyTransaction() {
-//   int success_flag = 0;
-//   // подавать на вхрд колво пшеницы и цену
-//   // проверить колво доступных акров
-//   // проверить наличие пшеницы для расчета
-//   // купить если все успещно
-//   // отправить код 1 если ошибка
-//
-//   return success_flag;
-// }

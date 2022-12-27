@@ -20,17 +20,12 @@ void Game::Start() {
   //    DoYouWantToExit();
 }
 void Game::NewGame() {
-  // Сброс до показателей первого уровня
-  //
-  // acre wheat people
+  // first lvl stats
   this->wheat.WheatStart(2800);
   this->people.PeopleStart(100);
   this->acre.AcreStart(1000);
 
-  // set players name??
-  // startRound  NextRound(round);
   round_ = 1;
-
   NextRound(round_);
 }
 void Game::Play() {
@@ -41,43 +36,27 @@ void Game::Play() {
     } else {
       NextRound(round_);
     };
-
     round_ += 1;
   }
-
   // TODO: count final stats
   // TODO:  show result & end the game
 }
-void Game::NextRound(int round_number) {
-  // просчет данных введенных + исходных
-  /* if (round_number >= 2) {
 
-   } else {
-     wheat.GenerateWheatPerAcre();
-     wheat.GenerateDestroyedWheat(people.GetPopulation());
-     people.CalculateStarvation(wheat.GetWheatQuantity());
-     people.GenerateNewcommers(wheat.GetWheatPerAcre(),
-                               wheat.GetWheatQuantity());
-     acre.GenerateAcrePrice();
-   }*/
-  CalculateNextStats();
-  //  а потом
-  // вывод данных
-  DisplayStats();
-  // счтьывние ответов пользователя
-  ReadPlayerInput();
-  // спросить про выход
-  // DoYouWantToExit();
+void Game::NextRound(int round_number) {
+  if (want_to_exit_ != 1) {
+    CalculateNextStats();
+
+    DisplayStats();
+
+    ReadPlayerInput();
+
+    DoYouWantToExit();
+  }
 }
 void Game::DoYouWantToExit() {
-  // в конце каждого раунда
-  //+ спросить
-  //+ продолжать или выйти
-  //+ если выйти, то сохраняем в файл и выходим
-  //+ если продолжить то созраняем файлы и  идем дальше;
-  std::cout << "\n Закончить игру?";
-  std::cout << "\n 1. Закончить игру и сохранить файлы. ";
-  std::cout << "\n 2. Продолжить игру и сохранить файлы. ";
+  std::cout << "\n Do you want to quit game?";
+  std::cout << "\n 1. Save and Quit. ";
+  std::cout << "\n 2. Continue game ... ";
   std::cin >> want_to_exit_;
 
   switch (want_to_exit_) {
@@ -87,7 +66,7 @@ void Game::DoYouWantToExit() {
       // exit + cout
       break;
     case 2:
-      std::cout << "\n Continue. ";
+      std::cout << "\n Continue ... ";
       // save + cout
       // continue round+=1;
       break;
@@ -227,7 +206,7 @@ void Game::CalculateNextStats() {
                               wheat.GetWheatQuantity());
     acre.GenerateAcrePrice();
   } else {
-    // Подсчет /// Update For NExt lv
+    // Update For Next lvl
     // UpdateWheat
     int harvested;
     if ((10 * people.GetPopulation()) > acre.GetAcreQuantity()) {
@@ -236,7 +215,6 @@ void Game::CalculateNextStats() {
       harvested = (10 * people.GetPopulation());
     }
 
-    // GenerateWheatPErAcre tut dolzhno bit
     wheat.GenerateWheatPerAcre();
     wheat.UpdateWheatQuantity(harvested, people.GetPopulation());
 
