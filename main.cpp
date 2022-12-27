@@ -12,6 +12,6 @@ using namespace std;
 
 int main() {
   Game MyGame;
-  MyGame.NewGame();
-  MyGame.DisplayStats();
+  MyGame.Play();
+  // MyGame.DisplayStats();
 }

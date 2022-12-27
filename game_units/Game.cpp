@@ -30,28 +30,32 @@ void Game::NewGame() {
   // set players name??
   // startRound  NextRound(round);
   round = 1;
+
+  NextRound(round);
 }
 void Game::Play() {
   // while round >=10
-  while (round < 10) {
-    if (round == 1) {
-      // NewGame
+  while (round <= 10) {
+    if (round == 0) {
+      NewGame();
     } else {
       NextRound(round);
     };
+
+    round += 1;
   }
 
   // TODO: count final stats
   // TODO:  show result & end the game
 }
 void Game::NextRound(int round_number) {
+  // просчет данных введенных + исходных
+  CalculateNextStats();
   //  а потом
   // вывод данных
-  // DisplayStats();
+  DisplayStats();
   // счтьывние ответов пользовател€
-  // ReadPlayerInput();
-  // просчет данных введенных + исходных
-  // CalculateStats();
+  ReadPlayerInput();
   // спросить про выход
   // DoYouWantToExit();
 }
@@ -84,16 +88,15 @@ void Game::DoYouWantToExit() {
 
 void Game::DisplayStats() {
   std::cout << "\n      I beg to report to you "
-            << "\n           In Year " << round << ",\n";
+            << "\n           In Year " << round << ",";
   // was
-  std::cout << "        Plague ? -> " << people.WasPlague() << ". \n      "
-            << people.GetStarvation(wheat.GetWheatQuantity())
-            << " people starved, \n            And\n      Rats destroyed "
-            << wheat.GetDestroyedWheat(people.GetPopulation())
-            << "  wheat.\n\n  "
-            << people.GetNewcommers(wheat.GetWheatPerAcre(),
-                                    wheat.GetWheatQuantity())
-            << " new people moved to the city. ";
+  if (people.WasPlague()) {
+    std::cout << " \nA horrible plague struck! Half the population died.";
+  }
+  std::cout << "\n       " << people.GetStarvation()
+            << " people starved, \n              And\n    Rats destroyed "
+            << wheat.GetDestroyedWheat() << "  wheat.\n\n  "
+            << people.GetNewcommers() << " new people moved to the city. ";
   // now
   std::cout << "\n  Now the city population is  " << people.GetPopulation()
             << "!\n"
@@ -107,24 +110,114 @@ void Game::DisplayStats() {
             << "Now price of one acre is " << acre.GetAcrePrice()
             << " wheat per acre.\n";
 }
+
 void Game::ReadPlayerInput() {
+  int wheat_all;
+  int max_buy_;
+  int max_sell_;
+  int max_feed_;
+  int max_plant_;
+
+  wheat_all = wheat.GetWheatQuantity();
+  max_buy_ = wheat_all / acre.GetAcrePrice();
+  max_sell_ = acre.GetAcreQuantity();
+  max_feed_ = 20 * people.GetPopulation();
+
   float tmp;
   // Enter the Info
-  std::cout << "\n\nEnter the numbers";
-  std::cout << "\nHow many acres you want to buy?";
-  std::cin >> tmp;
-  acre.ArcesWantToBuy(tmp);
+  std::cout << "\n\nNow, please, enter ";
 
-  std::cout << "\nHow many acres you want to sell?";
-  std::cin >> tmp;
-  acre.ArcesWantToSell(tmp);
-  std::cout << "\nHow many wheat you want to use as food?";
-  std::cin >> tmp;
-  wheat.WheatToFeed(tmp);
+  while (true) {
+    std::cout << "\nHow many acres you want to buy? You can buy from 0 to "
+              << max_buy_ << std::endl;
+    std::cin >> tmp;
 
-  std::cout << "\nHow many acres you want to use for planting the wheat?";
-  std::cin >> tmp;
-  acre.ArcesWantToPlant(tmp);
+    if (CheckTransaction(tmp, max_buy_) &&
+        CheckTransaction(acre.GetAcrePrice() * tmp, wheat_all)) {
+      acre.ArcesWantToBuy(tmp);
+      wheat_all = wheat_all - (tmp * acre.GetAcrePrice());
+      std::cout << "OK.Next...";
+      break;
+    } else {
+      std::cout << "Wrong input. Please enter the correct number...\n";
+      continue;
+    }
+  }
+
+  while (true) {
+    std::cout << "\nHow many acres you want to sell? You can sell from 0 to "
+              << max_sell_ << std::endl;
+    std::cin >> tmp;
+
+    if (CheckTransaction(tmp, max_sell_)) {
+      acre.ArcesWantToSell(tmp);
+      wheat_all = wheat_all + (tmp * acre.GetAcrePrice());
+      std::cout << "OK.Next...";
+      break;
+    } else {
+      std::cout << "Wrong input. Please enter the correct number...\n";
+      continue;
+    }
+  }
+
+  while (true) {
+    std::cout
+        << "\nHow many wheat you want to use as food? For all your people "
+           "you need "
+        << max_feed_ << std::endl;
+    std::cin >> tmp;
+
+    if (CheckTransaction(tmp, max_feed_)) {
+      wheat.WheatToFeed(tmp);
+      max_plant_ = 2 * (wheat_all - wheat.GetFoodWheat());
+      std::cout << "OK.Next...";
+      break;
+    } else {
+      std::cout << "Wrong input. Please enter the correct number...\n";
+      continue;
+    }
+  }
+
+  while (true) {
+    std::cout << "\nHow many acres do you wish to plant with seed? For current "
+                 "amout of acres you need "
+              << max_plant_ << std::endl;
+    std::cin >> tmp;
+
+    if (CheckTransaction(tmp, max_plant_) &&
+        CheckTransaction((tmp * wheat_all) / 2, wheat_all) &&
+        CheckTransaction(10 * tmp, people.GetPopulation())) {
+      wheat.ArcesWantToPlant(tmp);
+      std::cout << "OK.Next...";
+      break;
+    } else {
+      std::cout << "Wrong input. Please enter the correct number...\n";
+      continue;
+    }
+  }
 }
 
-void Game::CalculateStats() {}
+bool Game::CheckTransaction(int input, int max) {
+  if (input > -1 && input <= max) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+void Game::CalculateNextStats() {
+  acre.GenerateAcrePrice();
+
+  // ѕодсчет
+  // UpdateAcreQuantity
+  acre.UpdateAcreQuantity();
+
+  // UpdateWheat
+  int harvested = ((10 * people.GetPopulation()) > acre.GetAcreQuantity()
+                       ? acre.GetAcreQuantity()
+                       : (10 * people.GetPopulation()));
+  wheat.UpdateWheatQuantity(harvested, people.GetPopulation());
+
+  // UpdatePopulation
+  people.UpdatePopulation(wheat.GetWheatPerAcre(), wheat.GetWheatQuantity());
+}

@@ -5,13 +5,15 @@ class People {
   void PeopleStart(int start);
 
   int GetPopulation();
-  int GetStarvation(float wheat_quantity);
-  int GetNewcommers(int wheat_per_acre, float wheat);
+  int GetStarvation();
+  int GetNewcommers();
   bool WasPlague();
 
   void CalculateStarvation(float wheat);
   void GenerateNewcommers(int wheat_per_acre, float wheat);
   void GeneratePlague();
+
+  void UpdatePopulation(int wheat_per_acre, float wheat);
 
  private:
   int population_;

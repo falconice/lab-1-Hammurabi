@@ -5,15 +5,20 @@ class Wheat {
   void WheatStart(int start);
   void GenerateWheatPerAcre();
   int GetWheatPerAcre();
+  int GetFoodWheat();
 
   void GenerateDestroyedWheat(int population);
-  float GetDestroyedWheat(int population);
-  float GetWheatQuantity();
+  int GetDestroyedWheat();
+  int GetWheatQuantity();
   void WheatToFeed(float feedWheat);
+
+  void ArcesWantToPlant(int plant);
+  void UpdateWheatQuantity(int harvested_acres, int population);
 
  private:
   int wheat_per_acre_;
-  float all_wheat_;  // ??
-  float destroyed_wheat_;
-  float food_wheat_;  // from user
+  int all_wheat_;
+  int destroyed_wheat_;
+  int food_wheat_;
+  int plant_acres_;
 };

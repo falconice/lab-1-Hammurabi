@@ -14,7 +14,8 @@ class Game {
   void DisplayStats();
   void ReadPlayerInput();
 
-  void CalculateStats();
+  bool CheckTransaction(int input, int max);
+  void CalculateNextStats();
 
   // Menu:
   //  NewGame

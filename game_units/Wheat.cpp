@@ -5,7 +5,11 @@
 #include <iostream>
 
 Wheat::Wheat()
-    : wheat_per_acre_(0), all_wheat_(0), destroyed_wheat_(0), food_wheat_(0) {}
+    : wheat_per_acre_(0),
+      all_wheat_(0),
+      destroyed_wheat_(0),
+      food_wheat_(0),
+      plant_acres_(0) {}
 
 void Wheat::WheatStart(int start) {
   this->all_wheat_ = start;
@@ -16,8 +20,12 @@ void Wheat::GenerateWheatPerAcre() {
 }
 
 int Wheat::GetWheatPerAcre() {
-  GenerateWheatPerAcre();
+  // GenerateWheatPerAcre();
   return wheat_per_acre_;
+}
+
+int Wheat::GetFoodWheat() {
+  return this->food_wheat_;
 }
 
 void Wheat::GenerateDestroyedWheat(int population) {
@@ -26,15 +34,30 @@ void Wheat::GenerateDestroyedWheat(int population) {
   this->destroyed_wheat_ = rnd * all_wheat_after_harvest;
 }
 
-float Wheat::GetDestroyedWheat(int population) {
-  GenerateDestroyedWheat(population);
+int Wheat::GetDestroyedWheat() {
+  //  GenerateDestroyedWheat(population);
   return destroyed_wheat_;
 }
 
-float Wheat::GetWheatQuantity() {
+int Wheat::GetWheatQuantity() {
   return all_wheat_;
 }
 
 void Wheat::WheatToFeed(float feedWheat) {
-  this->all_wheat_ = feedWheat;
+  this->food_wheat_ = feedWheat;
+}
+
+void Wheat::ArcesWantToPlant(int plant) {
+  this->plant_acres_ = plant;
+}
+
+void Wheat::UpdateWheatQuantity(int harvested_acres, int population) {
+  all_wheat_ = all_wheat_ - food_wheat_;
+  all_wheat_ = all_wheat_ - plant_acres_;
+
+  GenerateWheatPerAcre();
+  all_wheat_ = all_wheat_ + (harvested_acres * GetWheatPerAcre());
+
+  GenerateDestroyedWheat(population);
+  all_wheat_ = all_wheat_ - destroyed_wheat_;
 }
