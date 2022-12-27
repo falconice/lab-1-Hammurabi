@@ -14,14 +14,9 @@ int People::GetPopulation() {
 }
 
 int People::GetStarvation() {
-  // CalculateStarvation(wheat_quantity);
   return this->starvation_;
 }
 int People::GetNewcommers() {
-  /* std::cout << " GET new! " << newcomers_ << " " << wheat_per_acre << " "
-             << wheat << " ";*/
-  // GenerateNewcommers(wheat_per_acre, wheat);
-  //  std::cout << " \nafter new! " << newcomers_ << " ";
   return newcomers_;
 }
 void People::CalculateStarvation(float wheat) {
@@ -44,7 +39,7 @@ void People::GenerateNewcommers(int wheat_per_acre, float wheat) {
 void People::GeneratePlague() {
   srand(time(0));
   plague_ = (15 >= (1 + (rand() % 100)));
-  // TODO:check generation
+
   if (plague_) {
     population_ = population_ / 2;
   }
@@ -53,13 +48,6 @@ void People::UpdatePopulation(int wheat_per_acre, float wheat) {
   GeneratePlague();
   population_ = population_ - starvation_;
   population_ = population_ + newcomers_;
-
-  // For Next Lvl
-  //  starvation
- // CalculateStarvation(wheat);
-
-  // newcommers
- // GenerateNewcommers(wheat_per_acre, wheat);
 }
 bool People::WasPlague() {
   return plague_;

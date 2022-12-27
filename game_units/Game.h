@@ -17,22 +17,6 @@ class Game {
   bool CheckTransaction(int input, int max);
   void CalculateNextStats();
 
-  // Menu:
-  //  NewGame
-  //  Load from File
-  //  Exit
-  //
-  //  OR
-  //  Save
-  //  Exit
-  //
-  //  NewGame()
-  //  NextRound()
-  //
-  //
-  //   SaveToFile()
-  //
-
  private:
   unsigned int round_;
   unsigned int want_to_exit_;

@@ -12,7 +12,6 @@ class Acre {
   void ArcesWantToSell(float sell);
 
   void UpdateAcreQuantity();
-  // int CheckAcreBuyTransaction();
 
  private:
   float acre_quantity_;
