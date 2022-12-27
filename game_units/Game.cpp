@@ -6,8 +6,8 @@
 #include <iostream>
 
 Game::Game() {
-  round = 0;
-  want_to_exit = 0;
+  round_ = 0;
+  want_to_exit_ = 0;
 }
 void Game::Start() {
   // New
@@ -29,20 +29,20 @@ void Game::NewGame() {
 
   // set players name??
   // startRound  NextRound(round);
-  round = 1;
+  round_ = 1;
 
-  NextRound(round);
+  NextRound(round_);
 }
 void Game::Play() {
   // while round >=10
-  while (round <= 10) {
-    if (round == 0) {
+  while (round_ <= 10) {
+    if (round_ == 0) {
       NewGame();
     } else {
-      NextRound(round);
+      NextRound(round_);
     };
 
-    round += 1;
+    round_ += 1;
   }
 
   // TODO: count final stats
@@ -50,6 +50,16 @@ void Game::Play() {
 }
 void Game::NextRound(int round_number) {
   // просчет данных введенных + исходных
+  /* if (round_number >= 2) {
+
+   } else {
+     wheat.GenerateWheatPerAcre();
+     wheat.GenerateDestroyedWheat(people.GetPopulation());
+     people.CalculateStarvation(wheat.GetWheatQuantity());
+     people.GenerateNewcommers(wheat.GetWheatPerAcre(),
+                               wheat.GetWheatQuantity());
+     acre.GenerateAcrePrice();
+   }*/
   CalculateNextStats();
   //  а потом
   // вывод данных
@@ -68,14 +78,16 @@ void Game::DoYouWantToExit() {
   std::cout << "\n Закончить игру?";
   std::cout << "\n 1. Закончить игру и сохранить файлы. ";
   std::cout << "\n 2. Продолжить игру и сохранить файлы. ";
-  std::cin >> want_to_exit;
+  std::cin >> want_to_exit_;
 
-  switch (want_to_exit) {
+  switch (want_to_exit_) {
     case 1:
+      std::cout << "\n EXIT. ";
       // save + cout
       // exit + cout
       break;
     case 2:
+      std::cout << "\n Continue. ";
       // save + cout
       // continue round+=1;
       break;
@@ -88,7 +100,7 @@ void Game::DoYouWantToExit() {
 
 void Game::DisplayStats() {
   std::cout << "\n      I beg to report to you "
-            << "\n           In Year " << round << ",";
+            << "\n           In Year " << round_ << ",";
   // was
   if (people.WasPlague()) {
     std::cout << " \nA horrible plague struck! Half the population died.";
@@ -116,7 +128,7 @@ void Game::ReadPlayerInput() {
   int max_buy_;
   int max_sell_;
   int max_feed_;
-  int max_plant_;
+  int max_wheat_for_plant;
 
   wheat_all = wheat.GetWheatQuantity();
   max_buy_ = wheat_all / acre.GetAcrePrice();
@@ -161,15 +173,15 @@ void Game::ReadPlayerInput() {
   }
 
   while (true) {
-    std::cout
-        << "\nHow many wheat you want to use as food? For all your people "
-           "you need "
-        << max_feed_ << std::endl;
+    std::cout << "\nHow many wheat you want to use as food? Each citizen needs "
+                 "20 wheat a year, so for all your people "
+                 "you need "
+              << max_feed_ << std::endl;
     std::cin >> tmp;
 
     if (CheckTransaction(tmp, max_feed_)) {
       wheat.WheatToFeed(tmp);
-      max_plant_ = 2 * (wheat_all - wheat.GetFoodWheat());
+      max_wheat_for_plant = 2 * (wheat_all - wheat.GetFoodWheat());
       std::cout << "OK.Next...";
       break;
     } else {
@@ -179,15 +191,16 @@ void Game::ReadPlayerInput() {
   }
 
   while (true) {
-    std::cout << "\nHow many acres do you wish to plant with seed? For current "
-                 "amout of acres you need "
-              << max_plant_ << std::endl;
+    std::cout
+        << "\nHow many acres do you wish to plant with seed? You can plant "
+        << max_wheat_for_plant << " acres.  " << std::endl;
     std::cin >> tmp;
 
-    if (CheckTransaction(tmp, max_plant_) &&
-        CheckTransaction((tmp * wheat_all) / 2, wheat_all) &&
-        CheckTransaction(10 * tmp, people.GetPopulation())) {
-      wheat.ArcesWantToPlant(tmp);
+    if (CheckTransaction(tmp, max_wheat_for_plant) &&
+        CheckTransaction(tmp, wheat_all) &&
+        CheckTransaction(tmp, 10 * people.GetPopulation()) &&
+        CheckTransaction(tmp, acre.GetAcreQuantity())) {
+      wheat.ArcesWantToPlant(tmp / 2);
       std::cout << "OK.Next...";
       break;
     } else {
@@ -206,18 +219,37 @@ bool Game::CheckTransaction(int input, int max) {
 }
 
 void Game::CalculateNextStats() {
-  acre.GenerateAcrePrice();
+  if (round_ <= 1) {
+    wheat.GenerateWheatPerAcre();
+    wheat.GenerateDestroyedWheat(people.GetPopulation());
+    people.CalculateStarvation(wheat.GetWheatQuantity());
+    people.GenerateNewcommers(wheat.GetWheatPerAcre(),
+                              wheat.GetWheatQuantity());
+    acre.GenerateAcrePrice();
+  } else {
+    // Подсчет /// Update For NExt lv
+    // UpdateWheat
+    int harvested;
+    if ((10 * people.GetPopulation()) > acre.GetAcreQuantity()) {
+      harvested = acre.GetAcreQuantity();
+    } else {
+      harvested = (10 * people.GetPopulation());
+    }
 
-  // Подсчет
-  // UpdateAcreQuantity
-  acre.UpdateAcreQuantity();
+    // GenerateWheatPErAcre tut dolzhno bit
+    wheat.GenerateWheatPerAcre();
+    wheat.UpdateWheatQuantity(harvested, people.GetPopulation());
 
-  // UpdateWheat
-  int harvested = ((10 * people.GetPopulation()) > acre.GetAcreQuantity()
-                       ? acre.GetAcreQuantity()
-                       : (10 * people.GetPopulation()));
-  wheat.UpdateWheatQuantity(harvested, people.GetPopulation());
+    wheat.GenerateDestroyedWheat(people.GetPopulation());
 
-  // UpdatePopulation
-  people.UpdatePopulation(wheat.GetWheatPerAcre(), wheat.GetWheatQuantity());
+    // UpdatePopulation
+    people.UpdatePopulation(wheat.GetWheatPerAcre(), wheat.GetWheatQuantity());
+    people.CalculateStarvation(wheat.GetWheatQuantity());
+    people.GenerateNewcommers(wheat.GetWheatPerAcre(),
+                              wheat.GetWheatQuantity());
+
+    // UpdateAcreQuantity
+    acre.UpdateAcreQuantity();
+    acre.GenerateAcrePrice();
+  }
 }

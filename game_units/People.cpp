@@ -56,10 +56,10 @@ void People::UpdatePopulation(int wheat_per_acre, float wheat) {
 
   // For Next Lvl
   //  starvation
-  CalculateStarvation(wheat);
+ // CalculateStarvation(wheat);
 
   // newcommers
-  GenerateNewcommers(wheat_per_acre, wheat);
+ // GenerateNewcommers(wheat_per_acre, wheat);
 }
 bool People::WasPlague() {
   return plague_;

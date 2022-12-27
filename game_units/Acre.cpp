@@ -29,12 +29,12 @@ float Acre::GetAcrePrice() {
 
 void Acre::ArcesWantToBuy(float buy) {
   buy_acres_ = buy;
-  acre_quantity_ = +buy_acres_;
+ // acre_quantity_ = +buy_acres_;
 }
 
 void Acre::ArcesWantToSell(float sell) {
   sell_acres_ = sell;
-  acre_quantity_ = -sell_acres_;
+ // acre_quantity_ = sell_acres_;
 }
 
 void Acre::UpdateAcreQuantity() {

@@ -16,6 +16,7 @@ void Wheat::WheatStart(int start) {
 }
 
 void Wheat::GenerateWheatPerAcre() {
+  srand(time(0));
   this->wheat_per_acre_ = 1 + (rand() % 6);
 }
 
@@ -29,14 +30,19 @@ int Wheat::GetFoodWheat() {
 }
 
 void Wheat::GenerateDestroyedWheat(int population) {
-  float rnd = (0 + (rand() % 700)) / 10000;
-  float all_wheat_after_harvest = all_wheat_ + wheat_per_acre_ * population;
-  this->destroyed_wheat_ = rnd * all_wheat_after_harvest;
+  srand(time(0));
+  float rnd = (1 + (rand() % 700)) / 10000.0f;
+
+  // chto eto? pochemu zdesi??
+  // float all_wheat_after_harvest = all_wheat_ + wheat_per_acre_ * population;
+  /* std::cout << "!!!!!!!!!  " << all_wheat_ << " " << wheat_per_acre_ << " "
+             << population << " " << all_wheat_after_harvest << " " << rnd;*/
+  this->destroyed_wheat_ = rnd * all_wheat_;
 }
 
 int Wheat::GetDestroyedWheat() {
   //  GenerateDestroyedWheat(population);
-  return destroyed_wheat_;
+  return this->destroyed_wheat_;
 }
 
 int Wheat::GetWheatQuantity() {
@@ -55,9 +61,9 @@ void Wheat::UpdateWheatQuantity(int harvested_acres, int population) {
   all_wheat_ = all_wheat_ - food_wheat_;
   all_wheat_ = all_wheat_ - plant_acres_;
 
-  GenerateWheatPerAcre();
+  // GenerateWheatPerAcre();
   all_wheat_ = all_wheat_ + (harvested_acres * GetWheatPerAcre());
 
-  GenerateDestroyedWheat(population);
+  // GenerateDestroyedWheat(population);
   all_wheat_ = all_wheat_ - destroyed_wheat_;
 }

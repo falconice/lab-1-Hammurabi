@@ -34,8 +34,8 @@ class Game {
   //
 
  private:
-  int round;
-  int want_to_exit;
+  unsigned int round_;
+  unsigned int want_to_exit_;
   Acre acre;
   People people;
   Wheat wheat;
